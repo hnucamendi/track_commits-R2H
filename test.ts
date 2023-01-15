@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import { OctokitResponse } from "@octokit/types";
 dotenv.config();
 
-class OctokitGitHub {
+class GHClient {
   // create access token
   ACCESS_TOKEN = process.env.ACCESSTOKEN;
 
@@ -49,7 +49,7 @@ class OctokitGitHub {
   };
 }
 
-const gh: OctokitGitHub = new OctokitGitHub();
+const gh: GHClient = new GHClient();
 const response = await gh.getCommits();
 
 const headers = response.headers;
