@@ -5,6 +5,8 @@ const prompt = promptSync();
 import * as dotenv from "dotenv";
 dotenv.config();
 
+//TODO: create interface for class
+//TODO: add better comments
 class GHClient {
   // get access token
   // TODO: Add ability for user to set password
@@ -58,10 +60,44 @@ class GHClient {
       return this.callWithRetry(fn, n + 1);
     }
   };
+
+  transformData(data: any[]): any[] {
+    let transformedData: {
+      name: string;
+      email: string;
+      date: string;
+      message: string;
+      sha: string;
+      url: string;
+    }[] = [
+      {
+        name: "",
+        email: "",
+        date: "",
+        message: "",
+        sha: "",
+        url: "",
+      },
+    ];
+
+    for (const item of data) {
+      transformedData.push({
+        name: item.commit.committer.name,
+        email: item.commit.committer.email,
+        date: item.commit.committer.date,
+        message: item.commit.message,
+        sha: item.commit.tree.sha,
+        url: item.commit.tree.url,
+      });
+    }
+    return transformedData;
+  }
 }
 
-const owner = prompt("Enter the username of the repository owner: ");
-const repo = prompt("Enter the name of the repository: ");
+// const owner = prompt("Enter the username of the repository owner: ");
+// const repo = prompt("Enter the name of the repository: ");
+const owner = "hnucamendi";
+const repo = "finance-tracker";
 
 // TODO:handle pagination
 const gh: GHClient = new GHClient();
@@ -71,7 +107,5 @@ const response = await gh.getCommitData({
   per_page: 100,
 });
 
-const headers = response.headers;
-const data = response.data;
-
-console.log(data[0]);
+//TODO: generate file, csv? pdf? json? leave as console? render in browser?
+console.log(gh.transformData(response.data));
