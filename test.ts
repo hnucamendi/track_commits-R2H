@@ -24,6 +24,7 @@ interface Client {
 
   transformData(data: any[]): any[];
 }
+
 //TODO: add better comments
 class GHClient implements Client {
   // get access token
