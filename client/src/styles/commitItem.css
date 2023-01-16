@@ -1,0 +1,32 @@
+.containers {
+  width: 100vw;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+  padding: 30px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  flex-wrap: wrap;
+  background-color: #212529;
+  table-layout: fixed;
+}
+
+th,
+td {
+  border: 1px solid #f7f7f7;
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+th {
+  background-color: #000;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #343a40;
+}

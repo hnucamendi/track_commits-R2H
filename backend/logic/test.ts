@@ -1,7 +1,5 @@
 import { Octokit } from "octokit";
 import { OctokitResponse } from "@octokit/types";
-import promptSync from "prompt-sync";
-const prompt = promptSync();
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -45,7 +43,7 @@ interface Client {
 }
 
 /** Class representing GitHubs Octokit API client */
-class GHClient implements Client {
+export default class GHClient implements Client {
   // TODO: Add ability for user to set password
   // TODO: store hashed pass, use pass to hash ACCESSTOKEN
 
@@ -124,16 +122,10 @@ class GHClient implements Client {
   }
 }
 
-const owner = prompt("Enter the username of the repository owner: ");
-const repo = prompt("Enter the name of the repository: ");
+// const owner = prompt("Enter the username of the repository owner: ");
+// const repo = prompt("Enter the name of the repository: ");
 
 // TODO:handle pagination
-const gh: GHClient = new GHClient();
-const response = await gh.getCommitData({
-  owner,
-  repo,
-  per_page: 100,
-});
 
 //TODO: generate file, csv? pdf? json? leave as console? render in browser?
-console.log(gh.transformData(response.data));
+// console.log(gh.transformData(response.data));
