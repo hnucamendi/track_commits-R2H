@@ -1,22 +1,20 @@
 import React, { useState } from "react";
+import CommitItem from "./components/CommitItem";
 import "./styles/input.css";
 
 function App() {
   const [owner, setOwner] = useState("");
   const [repo, setRepo] = useState("");
-  // const [response, setResponse] = useState([]);
+  const [data, setData] = useState([]);
+
+  const url = `http://localhost:8000/api/${owner}/${repo}`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const gh = new GHClient();
-    // setResponse(
-    //   await gh.getCommitData({
-    //     owner,
-    //     repo,
-    //     per_page: 100,
-    //   })
-    // );
+    const response = await fetch(url);
+    setData(await response.json());
   };
+
   return (
     <>
       <div className="container">
@@ -42,7 +40,7 @@ function App() {
           <button type="submit">Submit</button>
         </form>
       </div>
-      {/* <CommitItem response={response.data} /> */}
+      <CommitItem commits={data} />
     </>
   );
 }

@@ -1,28 +1,29 @@
 .containers {
-  width: 30%;
+  width: 100vw;
   margin: 0 auto;
   text-align: center;
   color: #fff;
-  /* background-color: #212529; */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px #ccc;
+  padding: 30px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  flex-wrap: wrap;
+  background-color: #212529;
+  table-layout: fixed;
 }
 
 th,
 td {
-  border: 1px solid #ddd;
+  border: 1px solid #f7f7f7;
   padding: 8px;
-  text-align: left;
+  text-align: center;
+  word-wrap: break-word;
 }
 
 th {
-  background-color: #495057;
+  background-color: #000;
   font-weight: bold;
 }
 

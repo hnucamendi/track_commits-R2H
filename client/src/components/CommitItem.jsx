@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/commitItem.css";
 
-const CommitItem = ({ data }) => {
+const CommitItem = (props) => {
   return (
     <div className="containers">
       <h1>Commits</h1>
@@ -17,14 +17,18 @@ const CommitItem = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {props.commits.map((item, index) => (
             <tr key={index}>
               <td>{item.name}</td>
               <td>{item.email}</td>
               <td>{item.date}</td>
               <td>{item.message}</td>
               <td>{item.sha}</td>
-              <td>{item.url}</td>
+              <td>
+                <a className="repo-link" href={item.url}>
+                  Link
+                </a>
+              </td>
             </tr>
           ))}
         </tbody>
