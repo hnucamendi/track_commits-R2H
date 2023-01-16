@@ -1,31 +1,41 @@
 import { Octokit } from "octokit";
-import * as dotenv from "dotenv";
 import { OctokitResponse } from "@octokit/types";
+import promptSync from "prompt-sync";
+const prompt = promptSync();
+import * as dotenv from "dotenv";
 dotenv.config();
 
 class GHClient {
-  // create access token
-  ACCESS_TOKEN = process.env.ACCESSTOKEN;
+  // get access token
+  // TODO: Add ability for user to set password
+  // TODO: store hashed pass, use pass to hash ACCESSTOKEN
+  static ACCESS_TOKEN = process.env.ACCESSTOKEN;
+  oktokit: Octokit;
 
-  // create instance of oktokit.js
-  oktokit: Octokit = new Octokit({
-    auth: this.ACCESS_TOKEN,
-  });
+  async getCommitData(options: {
+    owner: string;
+    repo: string;
+    per_page: number;
+  }): Promise<any> {
+    try {
+      this.oktokit = new Octokit({
+        auth: GHClient.ACCESS_TOKEN,
+      });
+    } catch (err) {
+      throw new Error(`[error] failed to instantiate oktokit: \n${err}\n`);
+    }
 
-  getCommitsRequest = async (options: { owner: string; repo: string }) => {
-    return this.oktokit.request(
-      "GET /repos/{owner}/{repo}/commits{?sha,path,author,since,until,per_page,page}",
-      options
-    );
-  };
-
-  async getCommits(): Promise<any> {
     try {
       return await this.callWithRetry(() =>
-        this.getCommitsRequest({ owner: "hnucamendi", repo: "finance-tracker" })
+        this.oktokit.request(
+          "GET /repos/{owner}/{repo}/commits{?sha,path,author,since,until,per_page,page}",
+          options
+        )
       );
     } catch (err) {
-      throw new Error(`[err] ${err}`);
+      throw new Error(
+        `[error] failed to make GET request to github API \n${err}\n`
+      );
     }
   }
 
@@ -37,10 +47,11 @@ class GHClient {
   ) => {
     try {
       return await fn();
-    } catch (e) {
+    } catch (err) {
       if (n > 7) {
-        console.log(`tried ${n} times`);
-        throw e;
+        throw new Error(
+          `[error] failed to GET data from endpoint after ${n} tries ${err}`
+        );
       }
       await this.sleep(Math.pow(n, 2) + Math.floor(Math.random() * 1000));
 
@@ -49,10 +60,18 @@ class GHClient {
   };
 }
 
+const owner = prompt("Enter the username of the repository owner: ");
+const repo = prompt("Enter the name of the repository: ");
+
+// TODO:handle pagination
 const gh: GHClient = new GHClient();
-const response = await gh.getCommits();
+const response = await gh.getCommitData({
+  owner,
+  repo,
+  per_page: 100,
+});
 
 const headers = response.headers;
 const data = response.data;
 
-console.log({ data, headers });
+console.log(data[0]);
