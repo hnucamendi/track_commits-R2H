@@ -87,7 +87,7 @@ export default class GHClient implements Client {
     try {
       return await fn();
     } catch (err) {
-      if (n > 7) {
+      if (n > 3) {
         throw new Error(
           `[error] failed to GET data from endpoint after ${n} tries ${err}`
         );
@@ -122,10 +122,6 @@ export default class GHClient implements Client {
   }
 }
 
-// const owner = prompt("Enter the username of the repository owner: ");
-// const repo = prompt("Enter the name of the repository: ");
-
 // TODO:handle pagination
 
 //TODO: generate file, csv? pdf? json? leave as console? render in browser?
-// console.log(gh.transformData(response.data));

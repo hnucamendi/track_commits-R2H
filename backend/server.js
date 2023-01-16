@@ -5,7 +5,6 @@ const app = express();
 app.use(cors());
 app.get("/api/:owner/:repo", async (req, res) => {
     const { owner, repo } = req.params;
-    console.log(owner, repo);
     const gh = new GHClient();
     const response = await gh.getCommitData({
         owner,
