@@ -44,7 +44,6 @@ interface Client {
   transformData(data: any[]): any[];
 }
 
-//TODO: add better comments
 /** Class representing GitHubs Octokit API client */
 class GHClient implements Client {
   // TODO: Add ability for user to set password
