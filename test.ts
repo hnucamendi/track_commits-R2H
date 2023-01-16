@@ -109,16 +109,7 @@ class GHClient implements Client {
       message: string;
       sha: string;
       url: string;
-    }[] = [
-      {
-        name: "",
-        email: "",
-        date: "",
-        message: "",
-        sha: "",
-        url: "",
-      },
-    ];
+    }[] = [];
 
     for (const item of data) {
       transformedData.push({
