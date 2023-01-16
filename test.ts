@@ -5,13 +5,32 @@ const prompt = promptSync();
 import * as dotenv from "dotenv";
 dotenv.config();
 
-//TODO: create interface for class
+interface Client {
+  ACCESS_TOKEN: string | undefined;
+  oktokit: Octokit;
+
+  getCommitData(options: {
+    owner: string;
+    repo: string;
+    per_page: number;
+  }): Promise<any>;
+
+  sleep(ms: number): Promise<any>;
+
+  callWithRetry(
+    fn: () => Promise<OctokitResponse<any, number>>,
+    n: number
+  ): Promise<any>;
+
+  transformData(data: any[]): any[];
+}
 //TODO: add better comments
-class GHClient {
+class GHClient implements Client {
   // get access token
   // TODO: Add ability for user to set password
   // TODO: store hashed pass, use pass to hash ACCESSTOKEN
-  static ACCESS_TOKEN = process.env.ACCESSTOKEN;
+
+  ACCESS_TOKEN = process.env.ACCESSTOKEN;
   oktokit: Octokit;
 
   async getCommitData(options: {
@@ -21,7 +40,7 @@ class GHClient {
   }): Promise<any> {
     try {
       this.oktokit = new Octokit({
-        auth: GHClient.ACCESS_TOKEN,
+        auth: this.ACCESS_TOKEN,
       });
     } catch (err) {
       throw new Error(`[error] failed to instantiate oktokit: \n${err}\n`);
@@ -41,12 +60,13 @@ class GHClient {
     }
   }
 
-  sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  sleep = (ms: number): Promise<any> =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   callWithRetry = async (
     fn: () => Promise<OctokitResponse<any, number>>,
     n: number = 0
-  ) => {
+  ): Promise<any> => {
     try {
       return await fn();
     } catch (err) {
