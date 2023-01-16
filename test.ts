@@ -9,25 +9,44 @@ interface Client {
   ACCESS_TOKEN: string | undefined;
   oktokit: Octokit;
 
+  /**
+   *
+   * @param options
+   * @returns {Promise} - Gets commit data using GitHub API by specifying user, and repository in options
+   */
   getCommitData(options: {
     owner: string;
     repo: string;
     per_page: number;
   }): Promise<any>;
 
+  /**
+   * @param ms
+   * @returns {Promise} - A promise that resolves after a specified amount of time
+   */
   sleep(ms: number): Promise<any>;
 
+  /**
+   * @param fn
+   * @param n
+   * @returns {Promise} - A promise that retries the function passed to it after a specified amount of time
+   */
   callWithRetry(
     fn: () => Promise<OctokitResponse<any, number>>,
     n: number
   ): Promise<any>;
 
+  /**
+   *
+   * @param data
+   * @returns {any[]} - Returns an array of objects containing transformed data from API response
+   */
   transformData(data: any[]): any[];
 }
 
 //TODO: add better comments
+/** Class representing GitHubs Octokit API client */
 class GHClient implements Client {
-  // get access token
   // TODO: Add ability for user to set password
   // TODO: store hashed pass, use pass to hash ACCESSTOKEN
 
