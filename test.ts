@@ -134,10 +134,8 @@ class GHClient implements Client {
   }
 }
 
-// const owner = prompt("Enter the username of the repository owner: ");
-// const repo = prompt("Enter the name of the repository: ");
-const owner = "hnucamendi";
-const repo = "finance-tracker";
+const owner = prompt("Enter the username of the repository owner: ");
+const repo = prompt("Enter the name of the repository: ");
 
 // TODO:handle pagination
 const gh: GHClient = new GHClient();
